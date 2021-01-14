@@ -1,11 +1,20 @@
-import { createState } from './createState';
+import { createState } from './state';
+
+export function isContext(value) {
+  return Object.prototype.hasOwnProperty.call(value, 'isState') && value.__isContext;
+}
 
 export function createContext(stateMap) {
   const context = {};
 
-  Object.defineProperty(context, 'isContext', {});
+  Object.defineProperty(context, '__isContext', {
+    value: true,
+    configurable: false,
+    enumerable: false,
+    writable: false
+  });
 
-  Object.keys(stateMap).reduce((context, key) => {
+  return Object.keys(stateMap).reduce((context, key) => {
     const state = createState(stateMap[key]);
 
     Object.defineProperties(context, {
@@ -26,7 +35,7 @@ export function createContext(stateMap) {
         enumerable: true
       }
     });
-  }, context);
 
-  return context;
+    return context;
+  }, context);
 }
