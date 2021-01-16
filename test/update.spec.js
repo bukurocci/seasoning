@@ -1,11 +1,11 @@
-import { effect, createState } from '../src/';
+import { update, createState } from '../src/';
 
-test('runs effect function when state is updated', () => {
+test('runs update function when state is updated', () => {
   const a = createState(5);
   const b = createState(4);
   let result = 0;
 
-  effect(() => {
+  update(() => {
     result = a.unwrap() + b.unwrap();
   });
 
@@ -16,14 +16,14 @@ test('runs effect function when state is updated', () => {
   expect(result).toBe(15);
 });
 
-test('do not update the state in effect function', () => {
+test('do not update the state in update function', () => {
   const a = createState(5);
   const b = createState(4);
   const c = createState(0);
 
   expect(() => {
-    effect(() => {
+    update(() => {
       c.update(a.unwrap() + b.unwrap());
     });
-  }).toThrowError('Do not update the state in effect/computed function.');
+  }).toThrowError('Do not update the state in update/computed function.');
 });

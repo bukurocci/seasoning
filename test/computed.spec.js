@@ -1,4 +1,4 @@
-import {computed, createState} from '../src/';
+import { computed, createState } from '../src/';
 
 test('update the computed value when state is updated', () => {
   const a = createState(1);
@@ -18,8 +18,8 @@ test('raise error when the state is updated in computed function', () => {
 
   expect(() => {
     computed(() => {
-      a.update(10)
+      a.update(10);
       return a.unwrap() * 2;
-    })
-  }).toThrowError('Do not update the state in effect/computed function.')
+    });
+  }).toThrowError('Do not update the state in update/computed function.');
 });

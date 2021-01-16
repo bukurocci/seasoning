@@ -1,9 +1,9 @@
-import { effect } from './effect';
+import { update } from './update';
 
 export function computed(computeFunction) {
   let value;
 
-  effect(() => {
+  update(() => {
     value = computeFunction();
   });
 
@@ -11,5 +11,5 @@ export function computed(computeFunction) {
     unwrap() {
       return value;
     }
-  }
+  };
 }

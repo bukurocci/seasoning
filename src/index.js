@@ -1,4 +1,4 @@
 export { createState } from './state';
 export { createContext } from './context';
-export { effect } from './effect';
+export { update } from './update';
 export { computed } from './computed';

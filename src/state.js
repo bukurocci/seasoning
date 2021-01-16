@@ -1,6 +1,6 @@
-import { currentEffect } from './internals/currentEffect';
+import { currentUpdate } from './internals/currentUpdate';
 
-const effectDependenciesMap = new Map();
+const updateDependenciesMap = new Map();
 
 class State {
   constructor(value) {
@@ -8,41 +8,41 @@ class State {
   }
 
   unwrap() {
-    const effect = currentEffect.effect;
+    const handler = currentUpdate.handler;
 
-    if(!effect) {
+    if (!handler) {
       return this._value;
     }
 
-    let effectDeps = effectDependenciesMap.get(this);
+    let updateDeps = updateDependenciesMap.get(this);
 
-    if(!effectDeps) {
-      effectDeps = new Set();
-      effectDependenciesMap.set(this, effectDeps);
+    if (!updateDeps) {
+      updateDeps = new Set();
+      updateDependenciesMap.set(this, updateDeps);
     }
 
-    effectDeps.add(effect);
+    updateDeps.add(handler);
 
     return this._value;
   }
 
   update(value) {
-    const effect = currentEffect.effect;
+    const handler = currentUpdate.handler;
 
-    if(effect) {
-      throw new Error('Do not update the state in effect/computed function.');
+    if (handler) {
+      throw new Error('Do not update the state in update/computed function.');
     }
 
     this._value = value;
 
-    const effectDeps = effectDependenciesMap.get(this);
+    const updateDeps = updateDependenciesMap.get(this);
 
-    if(!effectDeps) {
+    if (!updateDeps) {
       return;
     }
 
-    effectDeps.forEach((effect) => {
-      effect();
+    updateDeps.forEach((handler) => {
+      handler();
     });
   }
 }
